@@ -1,49 +1,75 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Hello World Demo</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>भोई माली समाज, राजसमंद</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
 
 <body>
 
-  <h1>GitHub Frontend</h1>
+  <div class="container">
 
-  <button onclick="getHello()">Backend से Message लाएँ</button>
+    <h1>भोई माली समाज, राजसमंद</h1>
 
-  <h2 id="result">Loading...</h2>
+    <div class="card">
 
-  <script>
+      <h2>Login</h2>
 
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbzZbdFyGXvv-ZAtaJA_D0ncbsQZWHM2lX2Shem1T_E3S6IUVlI52uo2jPtOfreJBBSa2g/exec";
+      <input
+        type="text"
+        id="loginPid"
+        placeholder="PID / Email"
+      >
 
-    async function getHello() {
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
 
-      try {
+      <button onclick="loginUser()">
+        Login
+      </button>
 
-        const response = await fetch(API_URL);
+      <div id="loginMessage"></div>
 
-        const data = await response.json();
+    </div>
 
-        document.getElementById("result").innerText =
-          data.message;
 
-      } catch (error) {
+    <div
+      id="userPanel"
+      class="card"
+      style="display:none;"
+    >
 
-        document.getElementById("result").innerText =
-          "Backend Error";
+      <h2>Account</h2>
 
-        console.error(error);
-      }
+      <div id="userInfo"></div>
 
-    }
+      <button onclick="loadMembers()">
+        Family Members
+      </button>
 
-    getHello();
+      <div id="members"></div>
 
-  </script>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
 
 </body>
+
 </html>
