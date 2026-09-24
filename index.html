@@ -1,361 +1,49 @@
-```html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>भोई माली समाज - Demo</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
-
-    .header {
-      background: #f57c00;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.12);
-    }
-
-    h2 {
-      margin-top: 0;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 13px;
-      border: none;
-      border-radius: 6px;
-      background: #f57c00;
-      color: white;
-      font-size: 17px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #e66f00;
-    }
-
-    button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
-    #message {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 6px;
-      display: none;
-      text-align: center;
-    }
-
-    .success {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-    }
-
-    .loading {
-      background: #fff3cd;
-      color: #856404;
-    }
-  </style>
+  <title>Hello World Demo</title>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>भोई माली समाज</h1>
-    <p>राजसमंद</p>
-  </div>
+  <h1>GitHub Frontend</h1>
 
+  <button onclick="getHello()">Backend से Message लाएँ</button>
 
-  <div class="container">
+  <h2 id="result">Loading...</h2>
 
-    <div class="card">
+  <script>
 
-      <h2>Demo Account Create</h2>
+    const API_URL =
+      "https://script.google.com/macros/s/XXXXXXXXXXXX/exec";
 
-      <form id="demoForm">
+    async function getHello() {
 
-        <label for="name">नाम</label>
+      try {
 
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="अपना नाम लिखें"
-          required
-        >
+        const response = await fetch(API_URL);
 
+        const data = await response.json();
 
-        <label for="mobile">मोबाइल नंबर</label>
+        document.getElementById("result").innerText =
+          data.message;
 
-        <input
-          type="tel"
-          id="mobile"
-          name="mobile"
-          placeholder="10 अंकों का मोबाइल नंबर"
-          maxlength="10"
-          required
-        >
+      } catch (error) {
 
+        document.getElementById("result").innerText =
+          "Backend Error";
 
-        <label for="email">Email</label>
-
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="example@gmail.com"
-        >
-
-
-        <button
-          type="submit"
-          id="submitBtn"
-        >
-          Save Data
-        </button>
-
-      </form>
-
-
-      <div id="message"></div>
-
-    </div>
-
-  </div>
-
-
-<script>
-
-/************************************************************
- * GOOGLE APPS SCRIPT WEB APP URL
- *
- * यहां अपना Apps Script Web App URL डालें
- ************************************************************/
-
-const SCRIPT_URL =
-  "YOUR_APPS_SCRIPT_WEB_APP_URL";
-
-
-/************************************************************
- * FORM SUBMIT
- ************************************************************/
-
-document
-  .getElementById("demoForm")
-  .addEventListener("submit", async function(event) {
-
-    event.preventDefault();
-
-
-    const name =
-      document.getElementById("name").value.trim();
-
-    const mobile =
-      document.getElementById("mobile").value.trim();
-
-    const email =
-      document.getElementById("email").value.trim();
-
-
-    /******************************************************
-     * Mobile Validation
-     ******************************************************/
-
-    if (!/^[0-9]{10}$/.test(mobile)) {
-
-      showMessage(
-        "कृपया सही 10 अंकों का मोबाइल नंबर डालें।",
-        "error"
-      );
-
-      return;
-    }
-
-
-    /******************************************************
-     * Button Disable
-     ******************************************************/
-
-    const button =
-      document.getElementById("submitBtn");
-
-    button.disabled = true;
-
-    button.innerText = "Saving...";
-
-
-    showMessage(
-      "डेटा सेव हो रहा है...",
-      "loading"
-    );
-
-
-    /******************************************************
-     * Data Object
-     ******************************************************/
-
-    const data = {
-
-      name: name,
-
-      mobile: mobile,
-
-      email: email
-
-    };
-
-
-    try {
-
-      /****************************************************
-       * Google Apps Script को POST
-       ****************************************************/
-
-      const response = await fetch(
-        SCRIPT_URL,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-
-          body: JSON.stringify(data)
-        }
-      );
-
-
-      /****************************************************
-       * Response पढ़ें
-       ****************************************************/
-
-      const result =
-        await response.json();
-
-
-      if (result.success) {
-
-        showMessage(
-          "✅ " + result.message +
-          "<br>Record ID: " +
-          result.recordId,
-          "success"
-        );
-
-
-        /**************************************************
-         * Form Clear
-         **************************************************/
-
-        document
-          .getElementById("demoForm")
-          .reset();
-
+        console.error(error);
       }
 
-      else {
-
-        showMessage(
-          "❌ " + result.message,
-          "error"
-        );
-
-      }
-
-
     }
 
-    catch (error) {
+    getHello();
 
-      console.error(error);
-
-      showMessage(
-        "❌ Backend से connection नहीं हो पाया।",
-        "error"
-      );
-
-    }
-
-
-    /******************************************************
-     * Button Enable
-     ******************************************************/
-
-    button.disabled = false;
-
-    button.innerText = "Save Data";
-
-  });
-
-
-
-/************************************************************
- * MESSAGE FUNCTION
- ************************************************************/
-
-function showMessage(text, type) {
-
-  const message =
-    document.getElementById("message");
-
-  message.innerHTML = text;
-
-  message.className = "";
-
-  message.classList.add(type);
-
-  message.style.display = "block";
-
-}
-
-</script>
+  </script>
 
 </body>
 </html>
-```
